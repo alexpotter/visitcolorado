@@ -149,13 +149,12 @@
 
             $.ajax({
                 url: url,
-                dataType: "jsonp",
+                dataType: "json",
+                contentType: "application/json",
                 type: 'get',
                 success: function (rooms) {
-                    console.log(rooms);
-                    $('#error').hide().html();
 
-                    rooms = $.parseJSON(rooms);
+                    $('#error').hide().html();
 
                     var html = '\
                     <table class="table" style="margin-top: 20px;">\
@@ -308,7 +307,7 @@
     }
 
     function displayBookings(room) {
-        roomCalander.initialize($('#roomDateSelector'), room, 'http://placestostay.alexpotter.me/apotter/api/book', 'dc45c373b4c92bc');
+        roomCalander.initialize($('#roomDateSelector'), room, 'http://placestostay.alexpotter.dev/apotter/index.php/api/book', 'dc45c373b4c92bc');
         $('#displayAvailability').click();
     }
 </script>
