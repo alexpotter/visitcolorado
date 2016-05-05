@@ -140,7 +140,7 @@ window.roomCalander = {
         $.ajax({
                 url: roomCalander.endPoint + '?api_key=' + roomCalander.apiKey,
                 type: 'post',
-                dataType: 'json',
+                dataType: 'application/json',
                 data: {
                     room_id: roomCalander.room.ID,
                     date_from: roomCalander.selectedFrom,
@@ -193,10 +193,9 @@ window.roomCalander = {
             .fail(function(jqXHR, status, thrownError) {
                 var responseText = jQuery.parseJSON(jqXHR.responseText);
 
-                alert(responseText.message);
+                alert(responseText.error);
                 roomCalander.calander.html('');
-                roomCalander.initialize(roomCalander.calander, roomCalander.room, roomCalander.endPoint);
-                this.initialize(roomCalander.calander, roomCalander.room);
+                roomCalander.initialize(roomCalander.calander, roomCalander.room, roomCalander.endPoint, roomCalander.apiKey);
             });
     }
 };

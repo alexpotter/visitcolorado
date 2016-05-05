@@ -1,7 +1,7 @@
 <!html>
 <html>
 <head>
-    <title>Visit Collerado</title>
+    <title>Visit Colorado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- jQuery -->
     <script src="dist/js/jquery.min.js"></script>
@@ -26,7 +26,7 @@
 <body>
 <div class="row">
     <div class="col-xs-12" style="text-align: center;">
-        <h1>Visit Colerado</h1>
+        <h1>Visit Colorado</h1>
     </div>
 </div>
 <div class="row" style="padding-top: 30px;">
@@ -46,7 +46,12 @@
                 <div class="form-group">
                     <div class="col-xs-12">
                         <h2 style="text-align: center;">Search a place:</h2>
-                        <input type="text" name="location" id="town" class="form-control" style="font-size: 22pt; height: 60px;" placeholder="Location">
+                        <select class="form-control" style="font-size: 22pt; height: 60px;" id="location_type">
+                            <option value="0">Select location type</option>
+                            <option value="Hotel">Hotel</option>
+                            <option value="Hostel">Hostel</option>
+                            <option value="Bed and Breakfast">Bed and Breakfast</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -104,7 +109,7 @@
 
     function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 51.5074, lng: 0.1278},
+            center: {lat: 39.550051, lng: -105.782067},
             zoom: 8
         });
         var infoWindow = new google.maps.InfoWindow({map: map});
@@ -143,17 +148,10 @@
             localStorage.setItem('dateTo', $('#dateTo').val());
             dateTo = dateTo[2] + '-' + dateTo[0] + '-' + dateTo[1];
 
-            var url = $(this).prop('action') +
-                '/' + $('#town').val() + '/'
-                + dateFrom + '/' + dateTo + '?api_key=dc45c373b4c92bc';
+            var url = $( this ).prop( 'action' ) + '/colorado/' + dateFrom + '/'
+                + dateTo + '/' + $('#location_type').val() + '?api_key=dc45c373b4c92bc';
 
-            $.ajax({
-                url: url,
-                dataType: "json",
-                contentType: "application/json",
-                type: 'get',
-                success: function (rooms) {
-
+            $.get(url).done(function (rooms) {
                     $('#error').hide().html();
 
                     var html = '\
@@ -171,7 +169,7 @@
 
                     var count = 0;
                     $.each(rooms, function (keys, params) {
-                        $.each(params, function (key, param) {
+                        $.each(params, function(key, param) {
 
                             var name = param.name;
                             var type = param.location_type;
@@ -189,12 +187,13 @@
                                 <div id="bodyContent">\
                                     <div class="row">';
 
-                            if (count == 0) {
+                            if (count == 0)
+                            {
                                 map.setCenter(location);
                                 map.setZoom(14);
                             }
 
-                            $.each(param.rooms, function (key1, param1) {
+                            $.each(param.rooms, function(key1, param1) {
                                 html += '\
                                     <tr>\
                                         <td>' + name + '</td>\
@@ -210,10 +209,10 @@
                                 contentString += '\
                                 <div class="col-md-4">\
                                     <p>\
-                                        ' + param1.room_description + '\
+                                        '+ param1.room_description + '\
                                     </p>\
                                     <p>\
-                                        Number of beds: ' + param1.number_of_beds + '\
+                                        Number of beds: ' + param1.number_of_beds +'\
                                         <br>\
                                         Price per night: £ ' + parseFloat(param1.room_price / 100).toFixed(2) + '\
                                     <p>\
@@ -237,22 +236,24 @@
                                 map: map,
                                 title: 'Location'
                             });
-                            marker.addListener('click', function () {
+                            marker.addListener('click', function() {
                                 infoWindow.open(map, marker);
                             });
 
-                            count++;
+                            count ++;
                         });
                     });
 
                     html += '</table>';
 
                     $('#results').html(html);
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
+                })
+                .fail(function(jqXHR, status, thrownError) {
+                    var responseText = jQuery.parseJSON(jqXHR.responseText);
+                    $('#error').show().html('\
+                        <div class="alert alert-danger">' + responseText.message + '</div>\
+                    ');
+                });
         });
 
         // View on map
