@@ -1,3 +1,8 @@
+<?php
+    $endpoint = 'http://placestostay.alexpotter.dev/apotter/index.php/api/';
+    $apiKey = 'dc45c373b4c92bc';
+?>
+
 <!html>
 <html>
 <head>
@@ -24,55 +29,68 @@
     </script>
 </head>
 <body>
-<div class="row">
-    <div class="col-xs-12" style="text-align: center;">
-        <h1>Visit Colorado</h1>
-    </div>
-</div>
-<div class="row" style="padding-top: 30px;">
-    <div class="col-xs-6">
-        <div id="map">
-
+<div id="splash-index">
+    <div class="overlay"></div>
+    <div class="splash-text-container-outer">
+        <div class="splash-text-container">
+            <p class="main-message">
+                Visit Colorado
+            </p>
+            <p class="sub-message">
+                <a class="start-search" data-scroll href="#searchContainer">Start Search</a>
+            </p>
         </div>
     </div>
-    <div class="col-xs-6">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1" id="error" style="display: none;">
-
+</div>
+<div id="searchContainer">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="row">
+                <div class="col-sm-10 col-sm-offset-1" id="error" style="display: none;">
+    
+                </div>
             </div>
+            <form class="form-horizontal" id="searchPlace" method="post" action="<?php echo $endpoint; ?>search">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <select class="form-control" style="font-size: 22pt; height: 60px;" id="location_type">
+                                <option value="0">Select location type</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Hostel">Hostel</option>
+                                <option value="Bed and Breakfast">Bed and Breakfast</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="available_to" class="form-control" type="text" id="dateFrom" style="font-size: 22pt; height: 60px;" placeholder="Date To">
+                        </div>
+                        <div class="col-md-6">
+                            <input name="available_from" type="text" class="form-control" id="dateTo" style="font-size: 22pt; height: 60px;" placeholder="Date From">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn search">Search</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <form class="form-horizontal" id="searchPlace" method="post" action="http://placestostay.alexpotter.dev/apotter/index.php/api/search">
-            <div class="col-sm-8 col-sm-offset-2">
-                <div class="form-group">
-                    <div class="col-xs-12">
-                        <h2 style="text-align: center;">Search a place:</h2>
-                        <select class="form-control" style="font-size: 22pt; height: 60px;" id="location_type">
-                            <option value="0">Select location type</option>
-                            <option value="Hotel">Hotel</option>
-                            <option value="Hostel">Hostel</option>
-                            <option value="Bed and Breakfast">Bed and Breakfast</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-6">
-                        <input name="available_to" class="form-control" type="text" id="dateFrom" style="font-size: 22pt; height: 60px;" placeholder="Date To">
-                    </div>
-                    <div class="col-md-6">
-                        <input name="available_from" type="text" class="form-control" id="dateTo" style="font-size: 22pt; height: 60px;" placeholder="Date From">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-lg btn-success" style="display: block; margin: auto;">Search</button>
-                </div>
-            </div>
-        </form>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-12">
-        <div id="results">
-
+<div id="resultsContainer">
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="map">
+    
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="results">
+    
+            </div>
         </div>
     </div>
 </div>
@@ -149,7 +167,7 @@
             dateTo = dateTo[2] + '-' + dateTo[0] + '-' + dateTo[1];
 
             var url = $( this ).prop( 'action' ) + '/colorado/' + dateFrom + '/'
-                + dateTo + '/' + $('#location_type').val() + '?api_key=dc45c373b4c92bc';
+                + dateTo + '/' + $('#location_type').val() + '?api_key=<?php echo $apiKey; ?>';
 
             $.get(url).done(function (rooms) {
                     $('#error').hide().html();
@@ -308,12 +326,17 @@
     }
 
     function displayBookings(room) {
-        roomCalander.initialize($('#roomDateSelector'), room, 'http://placestostay.alexpotter.dev/apotter/index.php/api/book', 'dc45c373b4c92bc');
+        roomCalander.initialize($('#roomDateSelector'), room, '<?php echo $endpoint; ?>book', '<?php echo $apiKey; ?>');
         $('#displayAvailability').click();
     }
 </script>
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAuK5rdDsSZpXyi5VBjW7g8N1IJUtAXZwA&callback=initMap">
+</script>
+<script src="dist/js/smooth-scroll.js"></script>
+<!-- Initiate smooth scroll -->
+<script>
+    smoothScroll.init();
 </script>
 </body>
 </html>
