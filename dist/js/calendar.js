@@ -140,12 +140,12 @@ window.roomCalander = {
         $.ajax({
                 url: roomCalander.endPoint + '?api_key=' + roomCalander.apiKey,
                 type: 'post',
-                dataType: 'application/json',
+                dataType: 'json',
                 data: {
                     room_id: roomCalander.room.ID,
                     date_from: roomCalander.selectedFrom,
                     date_to: roomCalander.selectedTo,
-                    user_id: 1
+                    user_id: 2
                 }
             })
             .done(function(response) {
