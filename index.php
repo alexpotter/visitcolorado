@@ -1,6 +1,6 @@
 <?php
     $endpoint = 'http://placestostay.alexpotter.dev/apotter/index.php/api/';
-    $apiKey = 'dc45c373b4c92bc';
+    $apiKey = 'da5560aaf5b9257';
 ?>
 
 <!html>
