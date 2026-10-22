@@ -1,5 +1,5 @@
 <?php
-    $endpoint = 'https://placestostay.alexpotter.me/apotter/index.php/api/';
+    $endpoint = 'https://placestostay.alexpotter.me/index.php/api/';
     $apiKey = '9dfb184560a245a';
 ?>
 
